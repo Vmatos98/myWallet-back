@@ -63,7 +63,6 @@ export async function Get_All_Transactions(req, res) {
     try {
         const session = await db.collection('sessions').findOne({token: authorization});
         const id = session.userId;
-        console.log(chalk.bold.green(id));
         const incomes = await db.collection('transactions').find( {$and:[{type:'entrada'},{userId:id}]}).toArray();
         const expenses = await db.collection('transactions').find({$and:[{type:'esaida'},{userId:id}]}).toArray();
         const all = await db.collection('transactions').find({userId:id}).toArray();

@@ -6,19 +6,17 @@ import Joi from "joi";
 
 
 import db from './DB.js';
-import {signUp, signIn} from './controllers/AccessController.js'; 
-import {New_Transaction, Get_All_Transactions} from './controllers/TransactionsController.js';
+
+import accessRouter from './routes/AccessRouter.js';
+import transactionsRouter from './routes/TransactionRouter.js';
+
 dotenv.config();
 const app = express().use(express.json()).use(cors());
+app.use(accessRouter);
+app.use(transactionsRouter);
 
 
-app.post("/sign-up", signUp);
 
-app.post("/sig-in", signIn);
-
-app.post("/new_transaction", New_Transaction);
-
-app.get("/statement", Get_All_Transactions);
 
 
 app.listen(process.env.Mongo_PORT);
