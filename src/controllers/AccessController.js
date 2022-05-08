@@ -13,10 +13,12 @@ const loginSchema = Joi.object({
 const signupSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(8).max(16).required(),
+    confirmPassword: Joi.string().min(8).max(16).required(),
     name: Joi.string().required()
 });
 
 export async function signUp(req, res) {
+    console.log(chalk.bold.green("Signup"));
     const user = req.body;
     const {name, email, password} = user;
     const validate = signupSchema.validate({...user});
