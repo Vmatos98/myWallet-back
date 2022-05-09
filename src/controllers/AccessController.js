@@ -60,7 +60,8 @@ export async function signIn(req, res) {
         const token = uuid();
         await db.collection("sessions").insertOne({
             userId: user._id,
-            token
+            token,
+            isValid: true
         })
         console.log(chalk.bold.green("Usuário autenticado"));
         res.send(token).status(200);
@@ -70,6 +71,19 @@ export async function signIn(req, res) {
     }
     }catch(err){
         console.log(chalk.bold.red("Erro ao autenticar usuário"));
+        res.sendStatus(401);
+    }
+}
+
+export async function signOut(req, res) {
+    const {authorization} = req.headers;
+    const token = authorization.replace('Bearer ', '');
+    try {
+        await db.collection('sessions').updateOne({token}, {$set: {isValid: false}});
+        res.sendStatus(200);
+        console.log(chalk.bold.green("Usuário desautenticado"));
+    } catch (err) {
+        console.log(chalk.bold.red("Erro ao desautenticar usuário"));
         res.sendStatus(401);
     }
 }

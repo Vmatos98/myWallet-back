@@ -19,7 +19,7 @@ export async function New_Transaction(req, res) {
     if(validate.error) {
         res.status(400).send(validate.error.details[0].message);
     }
-    if(data.value > saldo){
+    if(data.type === 'saida' && data.value > saldo){
         console.log(chalk.bold.red("Saldo insuficiente"));
         res.status(400).send({error: "Saldo insuficiente"});
         return;
@@ -71,10 +71,10 @@ export async function Get_All_Transactions(req, res) {
         const {name} = user;
         
         incomes.forEach(income => {
-            saldo += parseInt(income.value);
+            saldo += parseFloat(income.value);
         });
         expenses.forEach(expense => {
-            saldo -= parseInt(expense.value);
+            saldo -= parseFloat(expense.value);
         });
         all.forEach(transaction => {
             delete transaction.userId;
